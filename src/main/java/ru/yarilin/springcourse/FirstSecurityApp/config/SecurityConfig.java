@@ -1,21 +1,27 @@
 package ru.yarilin.springcourse.FirstSecurityApp.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationEventPublisher;
+import org.springframework.security.authentication.DefaultAuthenticationEventPublisher;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import ru.yarilin.springcourse.FirstSecurityApp.security.AuthProviderImpl;
 
 @EnableWebSecurity
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
-    private final AuthProviderImpl authProvider;
+@Configuration
+public class SecurityConfig {
+//    @Bean
+//    @ConditionalOnMissingBean(PersonDetailsService.class)
+//    InMemoryUserDetailsManager inMemoryUserDetailsManager(){
+//        String generatedPassword = "";
+//        return new InMemoryUserDetailsManager(User.withUsername("user")
+//                .password(generatedPassword).roles("USER").build());
+//    }
 
-    @Autowired
-    public SecurityConfig(AuthProviderImpl authProvider) {
-        this.authProvider = authProvider;
-    }
-
-    protected void configure(AuthenticationManagerBuilder auth){
-        auth.authenticationProvider(authProvider);
+    @Bean
+    @ConditionalOnMissingBean(AuthenticationEventPublisher.class)
+    DefaultAuthenticationEventPublisher defaultAuthenticationEventPublisher(ApplicationEventPublisher delegate) {
+        return new DefaultAuthenticationEventPublisher(delegate);
     }
 }
