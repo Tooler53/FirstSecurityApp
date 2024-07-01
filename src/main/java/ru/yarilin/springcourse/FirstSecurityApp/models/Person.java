@@ -23,6 +23,9 @@ public class Person {
     @Column
     private String password;
 
+    @Column
+    private String role;
+
     public Person() {
     }
 
@@ -61,6 +64,14 @@ public class Person {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     @Override

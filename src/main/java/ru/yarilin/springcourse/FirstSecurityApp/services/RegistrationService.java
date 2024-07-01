@@ -9,6 +9,7 @@ import ru.yarilin.springcourse.FirstSecurityApp.repositiries.PeopleRepository;
 
 @Component
 public class RegistrationService {
+    public static final String ROLE_USER = "ROLE_USER";
     private final PeopleRepository peopleRepository;
     private final PasswordEncoder passwordEncoder;
 
@@ -22,6 +23,7 @@ public class RegistrationService {
     public void register(Person person) {
         String encodedPassword = passwordEncoder.encode(person.getPassword());
         person.setPassword(encodedPassword);
+        person.setRole(ROLE_USER);
 
         peopleRepository.save(person);
     }

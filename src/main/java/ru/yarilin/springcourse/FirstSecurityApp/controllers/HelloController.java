@@ -1,19 +1,34 @@
 package ru.yarilin.springcourse.FirstSecurityApp.controllers;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import ru.yarilin.springcourse.FirstSecurityApp.security.PersonDetails;
+import ru.yarilin.springcourse.FirstSecurityApp.services.AdminService;
 
-@Controller
-@RequestMapping("/hello")
+@RestController
 public class HelloController {
-    @RequestMapping
+    private final AdminService adminService;
+
+    @Autowired
+    public HelloController(AdminService adminService) {
+        this.adminService = adminService;
+    }
+
+    @GetMapping("/hello")
+    @ResponseBody
     public String sayHello() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         PersonDetails personDetails = (PersonDetails) authentication.getPrincipal();
-        System.out.println(personDetails.getPerson());
-        return "hello/index";
+
+        return personDetails.getUsername();
+    }
+
+    @GetMapping("/admin")
+    public String adminPage() {
+        adminService.doAdminStuff();
+        return "hello/admin";
     }
 }
